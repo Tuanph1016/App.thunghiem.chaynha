@@ -4,7 +4,7 @@
   "description": "Employee Security Pass System",
   "start_url": "./index.html",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#24263a",
   "theme_color": "#24263a",
