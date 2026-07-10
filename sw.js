@@ -1,4 +1,12 @@
-const CACHE_NAME = 'wistron-security-v1';
+// ĐỔI TÊN CACHE MỖI KHI DEPLOY BẢN SỬA LỖI MỚI.
+// Đây là nguyên nhân khiến bản vá "thanh trắng status bar" trước đó
+// (sửa index.html + manifest.webmanifest) không được áp dụng ngay:
+// chiến lược fetch bên dưới là cache-first, và activate chỉ xóa các
+// cache có TÊN KHÁC với CACHE_NAME hiện tại. Nếu tên không đổi,
+// service worker cũ vẫn coi cache hiện có là "mới nhất" và tiếp tục
+// phục vụ index.html/manifest.webmanifest bản CŨ (có lỗi) cho người
+// dùng đã cài app, bất kể bạn đã cập nhật gì trên GitHub Pages.
+const CACHE_NAME = 'app-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -17,7 +25,9 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate: xóa các cache phiên bản cũ
+// Activate: xóa các cache phiên bản cũ (chỉ hoạt động khi CACHE_NAME
+// đã được đổi tên; nếu giữ nguyên tên như cũ thì dòng filter này
+// không xóa được gì, và bản lỗi cũ vẫn tồn tại trong cache)
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
